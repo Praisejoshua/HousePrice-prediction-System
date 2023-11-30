@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Prediction</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <style>
+body{
+    text-align: center;
+    background-color: gray;
+}
+button{
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: gray;
+    border: none;
+    border-radius: 0.255rem;
+    color: white;
+}
+
+button:hover{
+    background-color:rgb(40, 40, 40);
+    color: gray;
+}
+button:active{
+    opacity: 0.7;
+}
+div{
+    background-color: aliceblue;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    padding-bottom: 5rem;
+}
+input{
+    background-color:gray;
+    border: none;
+    padding: 0.2rem;
+    border-radius: 0.112rem;
+}
+    </style>
+</head>
+<body>
+    <div>
+        <h1>House Price Prediction</h1>
+        <div></div>
+        <form id="prediction-form">
+            <label for="bedrooms">Bedrooms: </label>
+            <input type="number" name="bedrooms" id="bedrooms" required>
+            <br>
+            <br>
+            <label for="bathrooms">Bathrooms: </label>
+            <input type="number" name="bathrooms" id="bathrooms" required>
+            <br>
+            <br>
+            <label for="sqft_living">Sqft Living: </label>
+            <input type="number" name="sqft_living" id="sqft_living" required>
+            <br>
+            <br>
+            <label for="sqft_lot">Sqft Lot: </label>
+            <input type="number" name="sqft_lot" id="sqft_lot" required>
+            <br>
+            <br>
+            <label for="floors">Floors: </label>
+            <input type="number" name="floors" id="floors" required>
+            <br>
+            <br>
+            <label for="zipcode">Zipcode: </label>
+            <input type="number" name="zipcode" id="zipcode" required>
+            <br>
+            <br>
+            <button type="button" onclick="predictPrice()">Predict Price</button>
+        </form>
+        <p>Predicted Price: <span id="predicted-price"></span></p>
+    </div>
+
+
+    <script>
+        function predictPrice() {
+            var formData = {
+                'bedrooms': parseFloat(document.getElementById('bedrooms').value),
+                'bathrooms': parseFloat(document.getElementById('bathrooms').value),
+                'sqft_living': parseFloat(document.getElementById('sqft_living').value),
+                'sqft_lot': parseFloat(document.getElementById('sqft_lot').value),
+                'floors': parseFloat(document.getElementById('floors').value),
+                'zipcode': parseInt(document.getElementById('zipcode').value)
+            };
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('predicted-price').textContent = data.predicted_price;
+            });
+        }
+    </script>
+</body>
+</html>
